@@ -4,8 +4,7 @@ from dyndesign import mergeclasses
 import matplotlib.pyplot as plt
 
 class CollatzGraph:
-
-    def __init__(self) -> None:
+    def __init__(self):
         self.sequence = []
 
     def output_number(self, n):
@@ -50,7 +49,6 @@ class CollatzCustom:
 
 
 class CollatzOutput:
-
     def output_number(self, n):
         print(f"{n}; ", end='')
 
