@@ -66,10 +66,12 @@ if __name__ == "__main__":
     parser.add_argument('-c', action='store_true', dest='custom_collatz', help='use custom Collatz instead')
     parser.add_argument('-g', action='store_true', dest='collatz_graph')
     args = parser.parse_args()
+
     CollatzMerged = mergeclasses(CollatzSequence, CollatzOutput)
     if args.custom_collatz:
         CollatzMerged = mergeclasses(CollatzMerged, CollatzCustom)
     if args.collatz_graph:
         CollatzMerged = mergeclasses(CollatzMerged, CollatzGraph, invoke_all=['output_number'])
+
     collatz = CollatzMerged(args.n)
     collatz.output_sequence()

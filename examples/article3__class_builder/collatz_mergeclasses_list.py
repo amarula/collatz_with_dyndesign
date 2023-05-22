@@ -7,7 +7,7 @@ class CollatzGraph:
     def output_number(self, n):
         self.sequence.append(n)
 
-    def output_graph(self, func):
+    def output_wrapper(self, func):
         self.sequence = []
         func(self)
         plt.plot(self.sequence)
@@ -22,7 +22,7 @@ class CollatzStatistics:
         self.max = max(self.max, n)
         self.count += 1
 
-    def output_stats(self, func):
+    def output_wrapper(self, func):
         self.max = 0
         self.count = 0
         func(self)
@@ -33,8 +33,8 @@ class CollatzStatistics:
 class CollatzSequence:
     FUNCTION_NAME = 'Collatz'
 
-    def __init__(self, n):
-        self.n = int(n)
+    def __init__(self, args):
+        self.n = int(args.n)
 
     def get_next_n(self, n):
         if n % 2 == 0:
@@ -64,7 +64,7 @@ class CollatzOutput:
     def output_number(self, n):
         print(f"{n}; ", end='')
 
-    @decoratewith("output_graph", "output_stats")
+    @decoratewith("output_wrapper")
     def output_sequence(self):
         print(f"{self.FUNCTION_NAME} sequence starting from {self.n} is:")
         self.output_number(self.n)
@@ -81,13 +81,14 @@ if __name__ == "__main__":
     parser.add_argument('-s', action='store_true', dest='collatz_statistics')
     args = parser.parse_args()
 
-    CollatzMerged = mergeclasses(CollatzSequence, CollatzOutput)
+    classes_to_merge = [CollatzSequence, CollatzOutput]
     if args.custom_collatz:
-        CollatzMerged = mergeclasses(CollatzMerged, CollatzCustom)
+        classes_to_merge.append(CollatzCustom)
     if args.collatz_graph:
-        CollatzMerged = mergeclasses(CollatzMerged, CollatzGraph, invoke_all=['output_number'])
+        classes_to_merge.append(CollatzGraph)
     if args.collatz_statistics:
-        CollatzMerged = mergeclasses(CollatzMerged, CollatzStatistics, invoke_all=['output_number'])
+        classes_to_merge.append(CollatzStatistics)
+    CollatzMerged = mergeclasses(*classes_to_merge, invoke_all=['output_number', 'output_wrapper'])
 
-    collatz = CollatzMerged(args.n)
+    collatz = CollatzMerged(args)
     collatz.output_sequence()

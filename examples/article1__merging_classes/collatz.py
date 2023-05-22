@@ -32,5 +32,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Calculate Collatz sequence.')
     parser.add_argument('n')
     args = parser.parse_args()
+
     collatz = Collatz(args.n)
     collatz.output_sequence()

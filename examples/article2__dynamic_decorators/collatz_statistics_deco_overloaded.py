@@ -80,6 +80,7 @@ if __name__ == "__main__":
     parser.add_argument('-g', action='store_true', dest='collatz_graph')
     parser.add_argument('-s', action='store_true', dest='collatz_statistics')
     args = parser.parse_args()
+
     CollatzMerged = mergeclasses(CollatzSequence, CollatzOutput)
     if args.custom_collatz:
         CollatzMerged = mergeclasses(CollatzMerged, CollatzCustom)
@@ -87,5 +88,6 @@ if __name__ == "__main__":
         CollatzMerged = mergeclasses(CollatzMerged, CollatzGraph, invoke_all=['output_number'])
     if args.collatz_statistics:
         CollatzMerged = mergeclasses(CollatzMerged, CollatzStatistics, invoke_all=['output_number', 'output_wrapper'])
+
     collatz = CollatzMerged(args.n)
     collatz.output_sequence()
